@@ -73,22 +73,27 @@ function loadNavbar() {
   const placeholder = document.getElementById("navbar-placeholder");
   placeholder.innerHTML = navHTML;
 
-  // "fixed" removes the navbar from normal document flow, so add a spacer
-  // matching its height to stop page content jumping up underneath it.
+  // ========== FIXED SPACER HEIGHT ==========
+  // Instead of calculating offsetHeight (which was giving 977px due to hidden mobile menu
+  // or oversized logo), we use a fixed, reasonable height.
+  // The navbar is ~76-80px tall on desktop (py-4 = 32px + content ~44px).
+  // On mobile, it's the same height.
   const navEl = document.getElementById("site-navbar");
   const navInner = document.getElementById("nav-bar-inner");
+  
   const spacer = document.createElement("div");
-  spacer.style.height = navEl.offsetHeight + "px";
+  // Fixed spacer height - adjust this value if your navbar is taller or shorter
+  // 76px matches the typical navbar height (py-4 32px + 44px logo/buttons)
+  spacer.style.height = "76px";
   placeholder.after(spacer);
 
-  // Recalculate spacer height once the logo image finishes loading,
-  // in case it changes the navbar's height after initial render.
-  const logoImg = navEl.querySelector("img");
-  if (logoImg && !logoImg.complete) {
-    logoImg.addEventListener("load", () => {
-      spacer.style.height = navEl.offsetHeight + "px";
-    });
-  }
+  // If you want a responsive spacer that adapts to screen size, uncomment this:
+  // function updateSpacerHeight() {
+  //   const isMobile = window.innerWidth < 768;
+  //   spacer.style.height = isMobile ? "72px" : "76px";
+  // }
+  // updateSpacerHeight();
+  // window.addEventListener("resize", updateSpacerHeight);
 
   // Highlight the active page's link
   document.querySelectorAll(".nav-link, .nav-link-mobile").forEach(link => {
