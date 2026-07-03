@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Products | NicyFoods</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FBF1E2',
+                        jaggery: '#5C3A25',
+                        ink: '#3A2417',
+                        turmeric: '#E8A33D',
+                        marigold: '#F2C14E',
+                        kumkum: '#A63A2E',
+                        herbal: '#5F7A4F',
+                    },
+                    fontFamily: {
+                        display: ['"Rozha One"', 'serif'],
+                        body: ['Poppins', 'sans-serif'],
+                    },
+                },
+            },
+        };
+    </script>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --cream: #FBF1E2;
+            --jaggery: #5C3A25;
+            --ink: #3A2417;
+            --turmeric: #E8A33D;
+            --marigold: #F2C14E;
+            --kumkum: #A63A2E;
+            --herbal: #5F7A4F;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--cream);
+            color: var(--ink);
+            overflow-x: hidden;
+        }
+        h1,
+        h2,
+        h3,
+        .font-display {
+            font-family: 'Rozha One', serif;
+            letter-spacing: .01em;
+        }
+
+        /* ---------- scroll reveal ---------- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity .8s cubic-bezier(.16, .84, .44, 1), transform .8s cubic-bezier(.16, .84, .44, 1);
+        }
+        .reveal.in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(22px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .card-in {
+            animation: fadeUp .6s cubic-bezier(.16, .84, .44, 1) both;
+        }
+
+        /* ---------- hero ---------- */
+        .hero-title-in {
+            animation: titleIn 1s cubic-bezier(.16, .84, .44, 1) both;
+        }
+        @keyframes titleIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ---------- kolam "draw-in" motif ---------- */
+        .kolam-trace path,
+        .kolam-trace circle,
+        .kolam-trace ellipse {
+            stroke-dasharray: 620;
+            stroke-dashoffset: 620;
+            transition: stroke-dashoffset 2.4s cubic-bezier(.16, .84, .44, 1);
+        }
+        .kolam-trace.in path,
+        .kolam-trace.in circle,
+        .kolam-trace.in ellipse {
+            stroke-dashoffset: 0;
+        }
+        .kolam-trace .dot {
+            opacity: 0;
+            transform: scale(0);
+            transform-box: fill-box;
+            transform-origin: center;
+            transition: opacity .5s ease, transform .5s cubic-bezier(.34, 1.56, .64, 1);
+        }
+        .kolam-trace.in .dot {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .kolam-trace.in .dot:nth-of-type(1) {
+            transition-delay: .2s
+        }
+        .kolam-trace.in .dot:nth-of-type(2) {
+            transition-delay: .5s
+        }
+        .kolam-trace.in .dot:nth-of-type(3) {
+            transition-delay: .8s
+        }
+        .kolam-trace.in .dot:nth-of-type(4) {
+            transition-delay: 1.1s
+        }
+
+        /* ---------- kolam divider ---------- */
+        .kolam-divider path,
+        .kolam-divider circle {
+            stroke-dasharray: 340;
+            stroke-dashoffset: 340;
+            transition: stroke-dashoffset 1.6s cubic-bezier(.16, .84, .44, 1);
+        }
+        .kolam-divider.in path,
+        .kolam-divider.in circle {
+            stroke-dashoffset: 0;
+        }
+
+        /* ---------- floating ladoo particles (HOME / ABOUT style) ---------- */
+        .ladoo-particle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, #F2C14E, #C8791F 70%);
+            opacity: .18;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .ladoo-particle.dim {
+            opacity: .10;
+        }
+        .ladoo-particle.glow {
+            opacity: .28;
+            box-shadow: 0 0 24px 6px rgba(242, 193, 78, .25);
+        }
+
+        .float-drift {
+            animation: driftY 7s ease-in-out infinite;
+        }
+        .float-drift-slow {
+            animation: driftY 11s ease-in-out infinite;
+        }
+        .float-y {
+            animation: floatY 5s ease-in-out infinite;
+        }
+        .float-y-slow {
+            animation: floatY 9s ease-in-out infinite;
+        }
+
+        @keyframes driftY {
+            0%,
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-18px) translateX(8px);
+            }
+        }
+        @keyframes floatY {
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-16px) rotate(6deg);
+            }
+        }
+
+        /* ---------- filter buttons ---------- */
+        .filter-btn {
+            transition: background-color .3s ease, color .3s ease, border-color .3s ease, transform .3s ease, box-shadow .3s ease;
+        }
+        .filter-btn:hover {
+            transform: translateY(-2px);
+        }
+        .filter-btn.active {
+            background-color: var(--kumkum);
+            color: #fff;
+            border-color: var(--kumkum);
+            box-shadow: 0 8px 18px -8px rgba(166, 58, 46, .55);
+        }
+        .filter-btn .count-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 6px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-left: 6px;
+            background: rgba(166, 58, 46, .1);
+            color: var(--kumkum);
+            transition: background-color .3s ease, color .3s ease;
+        }
+        .filter-btn.active .count-pill {
+            background: rgba(255, 255, 255, .25);
+            color: #fff;
+        }
+
+        /* ---------- product cards ---------- */
+        .product-card {
+            background: #FFFDF9;
+            box-shadow: inset 0 0 0 1px rgba(92, 58, 37, .06), 0 1px 2px rgba(92, 58, 37, .06);
+            transition: box-shadow .4s ease, transform .4s cubic-bezier(.16, .84, .44, 1);
+            cursor: pointer;
+        }
+        .product-card:hover {
+            box-shadow: inset 0 0 0 1px rgba(92, 58, 37, .08), 0 24px 40px -18px rgba(92, 58, 37, .4);
+            transform: translateY(-7px);
+        }
+        .product-card .prod-img {
+            transition: transform .5s cubic-bezier(.16, .84, .44, 1);
+        }
+        .product-card:hover .prod-img {
+            transform: scale(1.08);
+        }
+        .product-card .view-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        .product-card .view-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -60%;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(115deg, transparent, rgba(255, 255, 255, .55), transparent);
+            transform: skewX(-20deg);
+            transition: left .8s ease;
+        }
+        .product-card:hover .view-btn::before {
+            left: 130%;
+        }
+        .product-card .cat-tag {
+            transition: background-color .3s ease, color .3s ease, transform .3s ease;
+        }
+        .product-card:hover .cat-tag {
+            transform: translateY(-1px);
+        }
+
+        /* ---------- fade grid ---------- */
+        #product-grid.grid-fading {
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity .18s ease, transform .18s ease;
+        }
+        #product-grid {
+            transition: opacity .25s ease, transform .25s ease;
+        }
+
+        /* ---------- empty state ---------- */
+        .empty-state {
+            animation: fadeUp .5s cubic-bezier(.16, .84, .44, 1) both;
+        }
+
+        /* ---------- CTA shimmer ---------- */
+        .shimmer-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        .shimmer-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -60%;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(115deg, transparent, rgba(255, 255, 255, .55), transparent);
+            transform: skewX(-20deg);
+            transition: left .8s ease;
+        }
+        .shimmer-btn:hover::before {
+            left: 130%;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+            .reveal {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            .kolam-trace path,
+            .kolam-trace circle,
+            .kolam-trace ellipse {
+                stroke-dashoffset: 0 !important;
+            }
+            .kolam-trace .dot {
+                opacity: 1 !important;
+                transform: scale(1) !important;
+            }
+            .ladoo-particle {
+                opacity: .12 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-cream">
+
+    <div id="navbar-placeholder"></div>
+
+    <!-- ============ HERO ============ -->
+    <section class="relative w-full h-[420px] md:h-[480px] overflow-hidden bg-jaggery">
+        <img src="https://nicyfoods.com/images/products_hero.jpg" alt="Handmade ladoo collection" class="absolute inset-0 w-full h-full object-cover opacity-70" />
+        <div class="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/45 to-ink/25"></div>
+
+        <!-- ===== floating ladoo particles (HOME / ABOUT style) ===== -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none z-1">
+            <div class="ladoo-particle glow w-8 h-8 float-drift" style="top:12%; left:6%; --dur:8s; --delay:.2s;"></div>
+            <div class="ladoo-particle dim w-5 h-5 float-drift-slow" style="top:22%; left:18%; --dur:10s; --delay:1.4s;"></div>
+            <div class="ladoo-particle w-6 h-6 float-y" style="top:8%; left:32%; --dur:9s; --delay:2.1s;"></div>
+            <div class="ladoo-particle dim w-4 h-4 float-drift" style="top:18%; left:44%; --dur:7s; --delay:.6s;"></div>
+            <div class="ladoo-particle glow w-7 h-7 float-y-slow" style="top:10%; right:20%; --dur:11s; --delay:1.8s;"></div>
+            <div class="ladoo-particle w-6 h-6 float-drift-slow" style="top:6%; right:8%; --dur:8.5s; --delay:.9s;"></div>
+            <div class="ladoo-particle dim w-5 h-5 float-y" style="top:28%; right:32%; --dur:9.5s; --delay:2.6s;"></div>
+            <div class="ladoo-particle glow w-4 h-4 float-drift" style="bottom:20%; left:8%; --dur:10.5s; --delay:.3s;"></div>
+            <div class="ladoo-particle w-6 h-6 float-y-slow" style="bottom:12%; right:12%; --dur:8s; --delay:1.1s;"></div>
+            <div class="ladoo-particle dim w-5 h-5 float-drift-slow" style="bottom:25%; left:25%; --dur:9s; --delay:1.9s;"></div>
+            <div class="ladoo-particle glow w-7 h-7 float-y" style="bottom:8%; right:28%; --dur:10s; --delay:.5s;"></div>
+        </div>
+
+        <!-- signature kolam -->
+        <svg class="kolam-trace absolute -right-24 -top-16 w-[380px] h-[380px] opacity-25 hidden sm:block" viewBox="0 0 200 200" fill="none">
+            <g stroke="#F2C14E" stroke-width="1.1">
+                <circle cx="100" cy="100" r="90"/>
+                <circle cx="100" cy="100" r="70"/>
+                <path d="M100 30 Q120 60 100 100 Q80 140 100 170"/>
+                <path d="M30 100 Q60 80 100 100 Q140 120 170 100"/>
+            </g>
+            <circle class="dot" cx="100" cy="10" r="3" fill="#F2C14E"/>
+            <circle class="dot" cx="100" cy="190" r="3" fill="#F2C14E"/>
+            <circle class="dot" cx="10" cy="100" r="3" fill="#F2C14E"/>
+            <circle class="dot" cx="190" cy="100" r="3" fill="#F2C14E"/>
+        </svg>
+        <svg class="kolam-trace absolute -left-16 -bottom-16 w-[280px] h-[280px] opacity-20 hidden sm:block" viewBox="0 0 200 200" fill="none">
+            <g stroke="#F2C14E" stroke-width="1.1">
+                <circle cx="100" cy="100" r="80"/>
+                <path d="M100 40 Q130 100 100 160 Q70 100 100 40Z"/>
+            </g>
+            <circle class="dot" cx="100" cy="40" r="2.5" fill="#F2C14E"/>
+            <circle class="dot" cx="100" cy="160" r="2.5" fill="#F2C14E"/>
+        </svg>
+
+        <div class="relative z-10 h-full flex flex-col justify-center px-6 md:px-16 max-w-3xl">
+            <p class="hero-title-in text-marigold/90 tracking-[0.25em] uppercase text-xs md:text-sm font-semibold mb-4" style="animation-delay:.1s">25+ Varieties</p>
+            <h1 class="hero-title-in font-display text-3xl sm:text-4xl md:text-5xl text-cream leading-tight mb-4" style="animation-delay:.25s">Our Premium Collection</h1>
+            <p class="hero-title-in text-base sm:text-lg md:text-xl text-cream/85 font-light" style="animation-delay:.4s">25+ Handmade Ladoo Varieties for Every Health Need</p>
+        </div>
+    </section>
+
+    <!-- kolam divider -->
+    <div class="flex justify-center pt-10">
+        <svg class="kolam-divider w-40 h-10" viewBox="0 0 200 40" fill="none">
+            <path d="M2 20 Q 50 2, 100 20 T 198 20" stroke="#E8A33D" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="2" cy="20" r="3" fill="#A63A2E"/><circle cx="100" cy="20" r="3" fill="#A63A2E"/><circle cx="198" cy="20" r="3" fill="#A63A2E"/>
+        </svg>
+    </div>
+
+    <!-- ============ EXPLORE ALL PRODUCTS ============ -->
+    <section class="relative max-w-7xl mx-auto px-6 py-16 overflow-hidden">
+
+        <!-- ===== floating ladoo particles ===== -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="ladoo-particle dim w-14 h-14 float-drift-slow" style="top:4%; left:2%;"></div>
+            <div class="ladoo-particle w-9 h-9 float-y" style="top:8%; right:4%;"></div>
+            <div class="ladoo-particle glow w-6 h-6 float-drift" style="bottom:6%; left:6%;"></div>
+            <div class="ladoo-particle dim w-5 h-5 float-y-slow" style="bottom:10%; right:8%;"></div>
+            <div class="ladoo-particle w-7 h-7 float-drift-slow" style="top:30%; left:12%;"></div>
+            <div class="ladoo-particle glow w-5 h-5 float-y" style="top:25%; right:12%;"></div>
+            <div class="ladoo-particle dim w-8 h-8 float-drift" style="bottom:20%; left:20%;"></div>
+            <div class="ladoo-particle w-6 h-6 float-y-slow" style="bottom:18%; right:22%;"></div>
+            <div class="ladoo-particle glow w-5 h-5 float-drift-slow" style="top:45%; left:6%;"></div>
+            <div class="ladoo-particle dim w-4 h-4 float-y" style="top:40%; right:6%;"></div>
+            <div class="ladoo-particle w-7 h-7 float-drift" style="top:55%; left:18%;"></div>
+            <div class="ladoo-particle glow w-6 h-6 float-y-slow" style="top:50%; right:18%;"></div>
+        </div>
+
+        <!-- Heading -->
+        <div class="reveal text-center mb-10">
+            <span class="text-kumkum text-xs tracking-[0.3em] uppercase font-semibold">The Full Range</span>
+            <h2 class="flex items-center justify-center gap-3 font-display text-3xl sm:text-4xl text-jaggery mt-3">
+                <svg class="w-8 h-8 text-turmeric" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2c1 3-2 4-2 7a3 3 0 006 0c0-1-1-2-1-2 2 1 4 3.5 4 6.5A7 7 0 015 13.5C5 9 8 7 8 4c1 1 1.5 2 1.5 3.5C10.5 5 11 3.5 12 2z"/>
+                </svg>
+                Explore All Products
+            </h2>
+            <p class="mt-4 text-slate-500 max-w-2xl mx-auto leading-relaxed">Filter our collection by category to find the perfect handmade ladoo for your needs. Each product is crafted with pure ingredients and traditional methods.</p>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div id="filter-tabs" class="reveal flex flex-wrap justify-center gap-3 mb-12">
+            <button data-filter="all" class="filter-btn active px-6 py-2.5 rounded-full border border-kumkum text-sm font-semibold text-kumkum">All Products<span class="count-pill" data-count-for="all">0</span></button>
+            <button data-filter="millet" class="filter-btn px-6 py-2.5 rounded-full border border-slate-300 text-sm font-semibold text-slate-700 hover:border-kumkum hover:text-kumkum">Millet<span class="count-pill" data-count-for="millet">0</span></button>
+            <button data-filter="traditional" class="filter-btn px-6 py-2.5 rounded-full border border-slate-300 text-sm font-semibold text-slate-700 hover:border-kumkum hover:text-kumkum">Traditional<span class="count-pill" data-count-for="traditional">0</span></button>
+            <button data-filter="herbal" class="filter-btn px-6 py-2.5 rounded-full border border-slate-300 text-sm font-semibold text-slate-700 hover:border-kumkum hover:text-kumkum">Herbal<span class="count-pill" data-count-for="herbal">0</span></button>
+        </div>
+
+        <!-- Product Grid -->
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+
+    </section>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="js/navbar.js">
+    </script>
+    <script src="js/footer.js">
+    </script>
+    <script src="js/products-data.js">
+    </script>
+    <script>
+        const grid = document.getElementById("product-grid");
+
+        // populate filter counts once
+        document.querySelectorAll(".count-pill").forEach(pill => {
+            const f = pill.dataset.countFor;
+            const n = f === "all" ? PRODUCTS.length : PRODUCTS.filter(p => p.cat === f).length;
+            pill.textContent = n;
+        });
+
+        function render(filter) {
+            grid.classList.add("grid-fading");
+
+            setTimeout(() => {
+                grid.innerHTML = "";
+                const filtered = PRODUCTS.filter(p => filter === "all" || p.cat === filter);
+
+                if (filtered.length === 0) {
+                    grid.innerHTML = `
+                <div class="empty-state col-span-full flex flex-col items-center text-center py-16">
+                  <svg class="w-12 h-12 text-turmeric mb-4" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2c1 3-2 4-2 7a3 3 0 006 0c0-1-1-2-1-2 2 1 4 3.5 4 6.5A7 7 0 015 13.5C5 9 8 7 8 4c1 1 1.5 2 1.5 3.5C10.5 5 11 3.5 12 2z"/>
+                  </svg>
+                  <p class="font-display text-xl text-jaggery mb-1">No ladoos here yet</p>
+                  <p class="text-sm text-slate-500">Try another category to see what's available.</p>
+                </div>`;
+                    grid.classList.remove("grid-fading");
+                    return;
+                }
+
+                filtered.forEach((p, i) => {
+                    const weightsLine = p.weights
+                        .map(w => `${w.label.replace(" ", "")}₹${w.price ?? "-"}`)
+                        .join(" | ");
+
+                    const card = document.createElement("a");
+                    card.href = `product-detail.html?id=${p.id}`;
+                    card.className = "product-card card-in block rounded-2xl overflow-hidden flex flex-col";
+                    card.style.animationDelay = `${Math.min(i, 7) * 0.06}s`;
+                    card.innerHTML = `
+                <div class="h-44 bg-gradient-to-br from-orange-100 to-amber-50 overflow-hidden">
+                  <img src="${p.img}" alt="${p.name}" class="prod-img w-full h-full object-cover" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'), {className:'w-full h-full flex items-center justify-center text-slate-400 text-sm', innerText:'${p.name}'}));" />
+                </div>
+                <div class="p-5 flex flex-col flex-1">
+                  <span class="cat-tag self-start mb-2 text-[11px] font-bold tracking-wide text-kumkum bg-orange-50 px-3 py-1 rounded-full">${CATEGORY_LABEL[p.cat]}</span>
+                  <h3 class="font-display text-lg text-jaggery mb-1">${p.name}</h3>
+                  <p class="text-sm text-slate-500 flex-1 mb-3 leading-snug">${p.desc}</p>
+                  <div class="text-2xl font-extrabold text-kumkum mb-2">₹${p.price}</div>
+                  <p class="text-xs text-slate-500 mb-4"><span class="font-semibold text-jaggery">Courier Charges:</span> ${weightsLine}</p>
+                  <span class="view-btn mt-auto w-full text-center bg-gradient-to-r from-turmeric to-kumkum hover:opacity-95 text-white font-semibold py-2.5 rounded-lg transition-opacity">View Details</span>
+                </div>
+              `;
+                    grid.appendChild(card);
+                });
+
+                grid.classList.remove("grid-fading");
+            }, 180);
+        }
+
+        document.querySelectorAll(".filter-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                render(btn.dataset.filter);
+            });
+        });
+
+        render("all");
+
+        // Scroll reveal for hero/heading/filter blocks + signature kolam draw-in
+        const revealEls = document.querySelectorAll('.reveal, .kolam-divider, .kolam-trace');
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in');
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+        revealEls.forEach(el => io.observe(el));
+
+        // hero kolams should draw in on load, not wait for scroll (they're already in view)
+        window.addEventListener('load', () => {
+            document.querySelectorAll('section:first-of-type .kolam-trace').forEach(el => {
+                setTimeout(() => el.classList.add('in'), 300);
+            });
+        });
+    </script>
+
+</body>
+</html>

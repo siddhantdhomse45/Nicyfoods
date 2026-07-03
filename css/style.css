@@ -1,0 +1,5 @@
+/* Custom styles beyond Tailwind utilities go here */
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+}

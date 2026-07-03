@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | NicyFoods</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream:    '#FBF1E2',
+            jaggery:  '#5C3A25',
+            ink:      '#3A2417',
+            turmeric: '#E8A33D',
+            marigold: '#F2C14E',
+            kumkum:   '#A63A2E',
+            herbal:   '#5F7A4F',
+          },
+          fontFamily: {
+            display: ['"Rozha One"', 'serif'],
+            body: ['Poppins', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --cream:#FBF1E2; --jaggery:#5C3A25; --ink:#3A2417;
+      --turmeric:#E8A33D; --marigold:#F2C14E; --kumkum:#A63A2E; --herbal:#5F7A4F;
+    }
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{ font-family:'Poppins', sans-serif; background:var(--cream); color:var(--ink); overflow-x:hidden; }
+    h1,h2,h3,.font-display{ font-family:'Rozha One', serif; letter-spacing:.01em; }
+
+    input:focus, textarea:focus{
+      outline:none; border-color:var(--kumkum); box-shadow:0 0 0 3px rgba(166,58,46,0.15);
+    }
+    input, textarea{ transition: border-color .3s ease, box-shadow .3s ease, transform .2s ease; }
+    input:focus, textarea:focus{ transform:translateY(-1px); }
+
+    /* ---------- scroll reveal ---------- */
+    .reveal{ opacity:0; transform:translateY(28px); transition:opacity .8s cubic-bezier(.16,.84,.44,1), transform .8s cubic-bezier(.16,.84,.44,1); }
+    .reveal.in{ opacity:1; transform:translateY(0); }
+    .stagger.in > * { animation: fadeUp .7s cubic-bezier(.16,.84,.44,1) both; }
+    .stagger.in > *:nth-child(1){animation-delay:.05s}
+    .stagger.in > *:nth-child(2){animation-delay:.15s}
+    .stagger.in > *:nth-child(3){animation-delay:.25s}
+    .stagger.in > *:nth-child(4){animation-delay:.35s}
+    .stagger.in > *:nth-child(5){animation-delay:.45s}
+    .stagger.in > *:nth-child(6){animation-delay:.55s}
+    @keyframes fadeUp{ from{opacity:0; transform:translateY(22px);} to{opacity:1; transform:translateY(0);} }
+
+    /* ---------- hero ---------- */
+    .hero-kolam{ animation: spinSlow 90s linear infinite; transform-origin:center; }
+    @keyframes spinSlow{ to{ transform:rotate(360deg);} }
+    .hero-kolam-rev{ animation: spinSlowRev 70s linear infinite; transform-origin:center; }
+    @keyframes spinSlowRev{ to{ transform:rotate(-360deg);} }
+    .hero-title-in{ animation: titleIn 1s cubic-bezier(.16,.84,.44,1) both; }
+    @keyframes titleIn{ from{ opacity:0; transform:translateY(24px);} to{ opacity:1; transform:translateY(0);} }
+
+    /* ---------- kolam divider ---------- */
+    .kolam-divider path, .kolam-divider circle{
+      stroke-dasharray: 340; stroke-dashoffset: 340;
+      transition: stroke-dashoffset 1.6s cubic-bezier(.16,.84,.44,1);
+    }
+    .kolam-divider.in path, .kolam-divider.in circle{ stroke-dashoffset:0; }
+
+    /* ---------- cards ---------- */
+    .rise-card{ transition: transform .45s cubic-bezier(.16,.84,.44,1), box-shadow .45s ease; }
+    .rise-card:hover{ transform:translateY(-8px); box-shadow: 0 22px 40px -18px rgba(92,58,37,.3); }
+    .icon-spin{ transition: transform .6s cubic-bezier(.34,1.56,.64,1); }
+    .rise-card:hover .icon-spin{ transform: rotate(12deg) scale(1.08); }
+
+    .faq-card{ transition: transform .4s cubic-bezier(.16,.84,.44,1), box-shadow .4s ease, border-color .4s ease; }
+    .faq-card:hover{ transform:translateY(-4px); box-shadow: 0 16px 32px -16px rgba(92,58,37,.25); border-color:var(--turmeric); }
+
+    /* ---------- CTA buttons ---------- */
+    .cta-btn{ position:relative; overflow:hidden; }
+    .cta-btn::before{
+      content:''; position:absolute; top:0; left:-60%; width:40%; height:100%;
+      background:linear-gradient(115deg, transparent, rgba(255,255,255,.55), transparent);
+      transform:skewX(-20deg); transition:left .8s ease;
+    }
+    .cta-btn:hover::before{ left:130%; }
+
+    /* ---------- submit feedback ---------- */
+    .submit-check{ display:inline-flex; align-items:center; justify-content:center; opacity:0; transform:scale(.5); transition:opacity .3s ease, transform .3s cubic-bezier(.34,1.56,.64,1); }
+    .submit-check.show{ opacity:1; transform:scale(1); }
+
+    /* ---------- floating ladoo particles (HOME/ABOUT style) ---------- */
+    .ladoo-particle{
+      position:absolute; border-radius:50%;
+      background:radial-gradient(circle at 35% 30%, #F2C14E, #C8791F 70%);
+      opacity:.18;
+      pointer-events:none;
+      z-index:1;
+    }
+    .ladoo-particle.dim{ opacity:.10; }
+    .ladoo-particle.glow{ opacity:.28; box-shadow:0 0 24px 6px rgba(242,193,78,.25); }
+
+    .float-drift{ animation: driftY 7s ease-in-out infinite; }
+    .float-drift-slow{ animation: driftY 11s ease-in-out infinite; }
+    .float-y{ animation: floatY 5s ease-in-out infinite; }
+    .float-y-slow{ animation: floatY 9s ease-in-out infinite; }
+
+    @keyframes driftY{
+      0%,100%{ transform:translateY(0) translateX(0); }
+      50%{ transform:translateY(-18px) translateX(8px); }
+    }
+    @keyframes floatY{
+      0%,100%{ transform:translateY(0) rotate(0deg); }
+      50%{ transform:translateY(-16px) rotate(6deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{ animation:none !important; transition:none !important; }
+      .reveal{ opacity:1 !important; transform:none !important; }
+      .ladoo-particle{ opacity:.12 !important; }
+    }
+  </style>
+</head>
+<body class="bg-cream">
+
+  <div id="navbar-placeholder"></div>
+
+  <!-- ============ HERO ============ -->
+  <section class="relative bg-jaggery py-20 md:py-24 text-center px-6 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-kumkum/90 via-jaggery to-jaggery"></div>
+
+    <!-- Floating Particles -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="ladoo-particle glow w-10 h-10 float-drift" style="top:10%; left:5%; --dur:8s; --delay:.2s;"></div>
+      <div class="ladoo-particle dim w-6 h-6 float-drift-slow" style="top:20%; left:25%; --dur:10s; --delay:1.4s;"></div>
+      <div class="ladoo-particle w-8 h-8 float-y" style="top:8%; right:15%; --dur:9s; --delay:2.1s;"></div>
+      <div class="ladoo-particle dim w-5 h-5 float-drift" style="top:25%; right:5%; --dur:7s; --delay:.6s;"></div>
+      <div class="ladoo-particle glow w-12 h-12 float-y-slow" style="bottom:15%; left:8%; --dur:11s; --delay:1.8s;"></div>
+      <div class="ladoo-particle w-7 h-7 float-drift-slow" style="bottom:20%; right:10%; --dur:8.5s; --delay:.9s;"></div>
+      <div class="ladoo-particle dim w-9 h-9 float-y" style="bottom:8%; left:20%; --dur:9.5s; --delay:2.6s;"></div>
+      <div class="ladoo-particle glow w-6 h-6 float-drift" style="top:40%; left:40%; --dur:10.5s; --delay:.3s;"></div>
+    </div>
+
+    <svg class="hero-kolam absolute -right-20 -top-20 w-80 h-80 opacity-15 hidden sm:block" viewBox="0 0 200 200" fill="none">
+      <g stroke="#F2C14E" stroke-width="1.2"><circle cx="100" cy="100" r="90"/><circle cx="100" cy="100" r="65"/><path d="M100 10 L100 190 M10 100 L190 100"/></g>
+    </svg>
+    <svg class="hero-kolam-rev absolute -left-16 -bottom-16 w-64 h-64 opacity-10 hidden sm:block" viewBox="0 0 200 200" fill="none">
+      <g stroke="#F2C14E" stroke-width="1.2"><circle cx="100" cy="100" r="80"/></g>
+    </svg>
+
+    <div class="relative z-10">
+      <p class="hero-title-in text-marigold/90 tracking-[0.25em] uppercase text-xs md:text-sm font-semibold mb-4" style="animation-delay:.1s">We're Here To Help</p>
+      <h1 class="hero-title-in font-display text-3xl sm:text-4xl md:text-5xl text-cream mb-4" style="animation-delay:.25s">Get in Touch</h1>
+      <p class="hero-title-in text-cream/85 text-lg" style="animation-delay:.4s">We'd love to hear from you. Contact us for orders, inquiries, or feedback.</p>
+    </div>
+  </section>
+
+  <!-- kolam divider -->
+  <div class="flex justify-center pt-10">
+    <svg class="kolam-divider w-40 h-10" viewBox="0 0 200 40" fill="none">
+      <path d="M2 20 Q 50 2, 100 20 T 198 20" stroke="#E8A33D" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="2" cy="20" r="3" fill="#A63A2E"/><circle cx="100" cy="20" r="3" fill="#A63A2E"/><circle cx="198" cy="20" r="3" fill="#A63A2E"/>
+    </svg>
+  </div>
+
+  <!-- ============ CONTACT INFO & FORM ============ -->
+  <section class="relative max-w-6xl mx-auto px-6 py-16 overflow-hidden">
+    <!-- Floating Particles -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="ladoo-particle dim w-12 h-12 float-drift-slow" style="top:4%; left:3%;"></div>
+      <div class="ladoo-particle glow w-6 h-6 float-y" style="top:10%; right:5%;"></div>
+      <div class="ladoo-particle w-8 h-8 float-drift" style="bottom:12%; left:6%;"></div>
+      <div class="ladoo-particle dim w-5 h-5 float-y-slow" style="bottom:8%; right:8%;"></div>
+      <div class="ladoo-particle glow w-7 h-7 float-drift-slow" style="top:30%; left:20%;"></div>
+      <div class="ladoo-particle w-6 h-6 float-y" style="top:25%; right:18%;"></div>
+    </div>
+
+    <div class="relative z-10">
+      <div class="reveal text-center mb-12">
+        <span class="text-kumkum text-xs tracking-[0.3em] uppercase font-semibold">Reach Out</span>
+        <h2 class="font-display text-2xl sm:text-3xl text-jaggery mt-3 mb-4">Contact Information &amp; Order Form</h2>
+        <p class="text-slate-500 max-w-2xl mx-auto leading-relaxed">
+          Have a question about our products? Want to place an order? Fill out the form below
+          and we'll get back to you within 24 hours. You can also reach us directly using the contact details.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+        <!-- Send us a Message -->
+        <div class="reveal bg-white rounded-2xl shadow-md border border-slate-100 p-8">
+          <h3 class="font-display text-xl text-kumkum mb-6">Send us a Message</h3>
+          <form id="contact-form" class="space-y-5">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-2">Your Name *</label>
+              <input type="text" id="cf-name" required placeholder="First Name"
+                     class="w-full border border-slate-300 rounded-lg px-4 py-3 text-slate-700" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-2">Email Address *</label>
+              <input type="email" id="cf-email" required placeholder="customer@example.com"
+                     class="w-full border border-slate-300 rounded-lg px-4 py-3 text-slate-700" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-2">Phone Number</label>
+              <input type="tel" id="cf-phone" placeholder="+91 XXXXXXXXXX"
+                     class="w-full border border-slate-300 rounded-lg px-4 py-3 text-slate-700" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-2">Message *</label>
+              <textarea id="cf-message" required rows="5" placeholder="Tell us about your inquiry or order request..."
+                        class="w-full border border-slate-300 rounded-lg px-4 py-3 text-slate-700 resize-y"></textarea>
+            </div>
+            <button type="submit" id="cf-submit"
+                    class="cta-btn w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-turmeric to-kumkum hover:opacity-95 text-white font-semibold py-3.5 rounded-lg transition-all hover:-translate-y-0.5">
+              <span id="cf-submit-label">Send Message</span>
+              <span id="cf-submit-check" class="submit-check">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 6L9 17l-5-5"/>
+                </svg>
+              </span>
+            </button>
+            <p class="text-xs text-slate-400 text-center">* Required fields. Your message will be sent via your email client.</p>
+          </form>
+        </div>
+
+        <!-- Contact Details -->
+        <div class="reveal bg-orange-50 rounded-2xl p-8">
+          <h3 class="font-display text-xl text-kumkum mb-6">Contact Details</h3>
+
+          <div class="stagger reveal space-y-7">
+            <div class="rise-card bg-white/60 rounded-xl p-4 -m-4">
+              <h4 class="flex items-center gap-2 font-bold text-kumkum mb-1">
+                <svg class="icon-spin w-5 h-5 text-kumkum" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+                Customer Care
+              </h4>
+              <a href="tel:+918263001410" class="block text-kumkum font-semibold mb-1">+91 8263001410</a>
+              <p class="text-sm text-slate-500">Call us for immediate assistance with orders and inquiries.</p>
+            </div>
+
+            <div class="rise-card bg-white/60 rounded-xl p-4 -m-4">
+              <h4 class="flex items-center gap-2 font-bold text-kumkum mb-1">
+                <svg class="icon-spin w-5 h-5 text-kumkum" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 6l-10 7L2 6"/><path d="M2 6h20v12H2z"/>
+                </svg>
+                Email Us
+              </h4>
+              <a href="mailto:nicyfoods5@gmail.com" class="block text-kumkum font-semibold mb-1">nicyfoods5@gmail.com</a>
+              <p class="text-sm text-slate-500">Send us your inquiries, order requests, or feedback. We respond within 24 hours.</p>
+            </div>
+
+            <div class="rise-card bg-white/60 rounded-xl p-4 -m-4">
+              <h4 class="flex items-center gap-2 font-bold text-kumkum mb-1">
+                <svg class="icon-spin w-5 h-5 text-kumkum" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+                </svg>
+                Office Address
+              </h4>
+              <p class="text-slate-600 leading-relaxed">
+                Plot No 20, Saikrupa Society<br>
+                Ingale Nagar, Warje Jakat Naka<br>
+                Warje, Pune – 411052<br>
+                Maharashtra, India
+              </p>
+              <p class="text-sm text-slate-500 mt-1">Visit us or place orders over the phone for fresh delivery in Pune.</p>
+            </div>
+
+            <div class="rise-card bg-white/60 rounded-xl p-4 -m-4">
+              <h4 class="flex items-center gap-2 font-bold text-kumkum mb-2">
+                <svg class="icon-spin w-5 h-5 text-kumkum" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07l-1.5 1.5"/>
+                  <path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07l1.49-1.49"/>
+                </svg>
+                Quick Links
+              </h4>
+              <ul class="space-y-1.5 text-sm">
+                <li><a href="home.html" class="text-kumkum font-semibold hover:underline">→ Home</a></li>
+                <li><a href="about.html" class="text-kumkum font-semibold hover:underline">→ About Us</a></li>
+                <li><a href="products.html" class="text-kumkum font-semibold hover:underline">→ Browse Products</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MAP ============ -->
+  <section class="relative reveal max-w-6xl mx-auto px-6 pb-16 overflow-hidden">
+    <!-- Floating Particles -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="ladoo-particle glow w-6 h-6 float-drift" style="top:10%; left:5%;"></div>
+      <div class="ladoo-particle dim w-5 h-5 float-y-slow" style="bottom:10%; right:5%;"></div>
+      <div class="ladoo-particle w-7 h-7 float-drift-slow" style="top:40%; right:10%;"></div>
+    </div>
+
+    <div class="relative z-10 rounded-2xl overflow-hidden shadow-md border border-slate-100 h-[380px]">
+      <iframe
+        title="NicyFoods Location"
+        class="w-full h-full border-0"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        src="https://www.google.com/maps?q=Plot+No+20,+Saikrupa+Society,+Ingale+Nagar,+Warje+Jakat+Naka,+Warje,+Pune+411052&output=embed">
+      </iframe>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="relative py-16 bg-jaggery/[0.04] overflow-hidden">
+    <!-- Floating Particles -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="ladoo-particle glow w-14 h-14 float-drift-slow" style="top:4%; left:2%;"></div>
+      <div class="ladoo-particle w-9 h-9 float-y" style="top:10%; right:4%;"></div>
+      <div class="ladoo-particle dim w-8 h-8 float-drift" style="bottom:8%; left:6%;"></div>
+      <div class="ladoo-particle glow w-6 h-6 float-y-slow" style="bottom:12%; right:8%;"></div>
+      <div class="ladoo-particle w-5 h-5 float-drift-slow" style="top:35%; left:20%;"></div>
+      <div class="ladoo-particle dim w-7 h-7 float-y" style="top:40%; right:18%;"></div>
+      <div class="ladoo-particle glow w-10 h-10 float-drift" style="top:60%; left:10%;"></div>
+      <div class="ladoo-particle w-6 h-6 float-y-slow" style="top:55%; right:12%;"></div>
+    </div>
+
+    <div class="relative max-w-6xl mx-auto px-6">
+      <div class="reveal text-center mb-12">
+        <span class="text-kumkum text-xs tracking-[0.3em] uppercase font-semibold">Common Questions</span>
+        <h2 class="font-display text-2xl sm:text-3xl text-jaggery mt-3">Frequently Asked Questions</h2>
+      </div>
+
+      <div class="stagger reveal grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <div class="faq-card bg-white rounded-xl border-l-4 border-turmeric shadow-sm p-7">
+          <h3 class="flex items-center gap-2 font-bold text-kumkum text-lg mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-turmeric flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="10"/>
+            </svg>
+            How do I place an order?
+          </h3>
+          <p class="text-slate-600 leading-relaxed">You can place an order by calling us at +91 8263001410 or emailing nicyfoods5@gmail.com. Use the contact form to get in touch with your specific requirements.</p>
+        </div>
+
+        <div class="faq-card bg-white rounded-xl border-l-4 border-turmeric shadow-sm p-7">
+          <h3 class="flex items-center gap-2 font-bold text-kumkum text-lg mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-turmeric flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="10"/>
+            </svg>
+            What is the minimum order quantity?
+          </h3>
+          <p class="text-slate-600 leading-relaxed">We accept orders of any quantity. For bulk orders or special requests, please contact us directly for best pricing and availability.</p>
+        </div>
+
+        <div class="faq-card bg-white rounded-xl border-l-4 border-turmeric shadow-sm p-7">
+          <h3 class="flex items-center gap-2 font-bold text-kumkum text-lg mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-turmeric flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="10"/>
+            </svg>
+            Do you deliver outside Pune?
+          </h3>
+          <p class="text-slate-600 leading-relaxed">Currently, we primarily deliver in and around Pune. For inquiries about delivery to other areas, please contact us to discuss shipping options.</p>
+        </div>
+
+        <div class="faq-card bg-white rounded-xl border-l-4 border-turmeric shadow-sm p-7">
+          <h3 class="flex items-center gap-2 font-bold text-kumkum text-lg mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-turmeric flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="10"/>
+            </svg>
+            Are your products suitable for diabetics?
+          </h3>
+          <p class="text-slate-600 leading-relaxed">While we use natural jaggery instead of refined sugar, we recommend consulting with your healthcare provider. Our millet varieties are also a good low-glycemic option.</p>
+        </div>
+
+        <div class="faq-card bg-white rounded-xl border-l-4 border-turmeric shadow-sm p-7">
+          <h3 class="flex items-center gap-2 font-bold text-kumkum text-lg mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-turmeric flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="10"/>
+            </svg>
+            What about quality and freshness?
+          </h3>
+          <p class="text-slate-600 leading-relaxed">All our products are handmade and delivered fresh. We don't use preservatives, so products should be consumed within 7-10 days for optimal taste and nutritional value.</p>
+        </div>
+
+        <div class="faq-card bg-white rounded-xl border-l-4 border-turmeric shadow-sm p-7">
+          <h3 class="flex items-center gap-2 font-bold text-kumkum text-lg mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-turmeric flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="10"/>
+            </svg>
+            Can you customize orders?
+          </h3>
+          <p class="text-slate-600 leading-relaxed">Yes! We can customize orders based on your preferences. Contact us to discuss custom varieties, packaging, or bulk requirements.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BULK ORDERS CTA ============ -->
+  <section class="relative py-16 text-center px-6 overflow-hidden bg-jaggery">
+    <!-- Floating Particles -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="ladoo-particle glow w-12 h-12 float-drift" style="top:10%; left:8%;"></div>
+      <div class="ladoo-particle dim w-6 h-6 float-y-slow" style="top:15%; left:40%;"></div>
+      <div class="ladoo-particle w-9 h-9 float-drift-slow" style="bottom:12%; right:10%;"></div>
+      <div class="ladoo-particle dim w-5 h-5 float-y" style="bottom:18%; right:35%;"></div>
+      <div class="ladoo-particle glow w-8 h-8 float-drift" style="top:35%; left:20%;"></div>
+      <div class="ladoo-particle w-7 h-7 float-y-slow" style="top:30%; right:25%;"></div>
+      <div class="ladoo-particle dim w-10 h-10 float-drift-slow" style="bottom:20%; left:25%;"></div>
+    </div>
+
+    <svg class="hero-kolam absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[460px] h-[460px] opacity-10" viewBox="0 0 200 200" fill="none">
+      <g stroke="#F2C14E" stroke-width="1"><circle cx="100" cy="100" r="95"/><circle cx="100" cy="100" r="75"/><circle cx="100" cy="100" r="55"/></g>
+    </svg>
+
+    <div class="reveal relative z-10">
+      <h2 class="font-display text-2xl sm:text-3xl mb-4">
+        <span class="text-marigold">Interested in Bulk Orders or</span>
+        <span class="text-cream"> Partnership?</span>
+      </h2>
+      <p class="text-cream/75 max-w-2xl mx-auto mb-8 leading-relaxed">
+        We offer special pricing for bulk orders, corporate gifts, and business partnerships.
+        Contact us directly to discuss your requirements and get a custom quote.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="tel:+918263001410"
+           class="cta-btn inline-flex items-center gap-2 bg-gradient-to-r from-turmeric to-kumkum hover:opacity-95 text-white font-semibold px-8 py-3.5 rounded-xl transition-all hover:-translate-y-0.5">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          Call +91 8263001410
+        </a>
+        <a href="mailto:nicyfoods5@gmail.com"
+           class="inline-flex items-center gap-2 border-2 border-cream/60 text-cream font-semibold px-8 py-3.5 rounded-xl hover:bg-cream/10 transition-all hover:-translate-y-0.5">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 6l-10 7L2 6"/><path d="M2 6h20v12H2z"/>
+          </svg>
+          Email Us
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WHY CHOOSE US ============ -->
+  <section class="relative py-16 bg-jaggery/[0.04] overflow-hidden">
+    <!-- Floating Particles -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="ladoo-particle glow w-10 h-10 float-drift-slow" style="top:6%; left:4%;"></div>
+      <div class="ladoo-particle dim w-6 h-6 float-y" style="top:12%; right:6%;"></div>
+      <div class="ladoo-particle w-8 h-8 float-drift" style="bottom:8%; left:8%;"></div>
+      <div class="ladoo-particle glow w-5 h-5 float-y-slow" style="bottom:12%; right:10%;"></div>
+      <div class="ladoo-particle dim w-7 h-7 float-drift-slow" style="top:35%; left:15%;"></div>
+      <div class="ladoo-particle w-6 h-6 float-y" style="top:30%; right:15%;"></div>
+    </div>
+
+    <div class="relative max-w-6xl mx-auto px-6">
+      <div class="reveal text-center mb-12">
+        <span class="text-kumkum text-xs tracking-[0.3em] uppercase font-semibold">The NicyFoods Difference</span>
+        <h2 class="font-display text-2xl sm:text-3xl text-jaggery mt-3">Why Choose NicyFoods?</h2>
+      </div>
+
+      <div class="stagger reveal grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <div class="rise-card bg-white rounded-2xl shadow-sm p-8 text-center">
+          <div class="icon-spin w-14 h-14 mx-auto mb-5 rounded-xl bg-gradient-to-br from-amber-300 to-orange-400 text-white flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6L12 2z"/>
+              <path d="M19 14l.8 2.4L22 17l-2.2.6L19 20l-.8-2.4L16 17l2.2-.6L19 14z" opacity="0.6"/>
+            </svg>
+          </div>
+          <h3 class="font-bold text-kumkum text-lg mb-3">Premium Quality</h3>
+          <p class="text-sm text-slate-500 leading-relaxed">100% handmade with pure ghee, natural jaggery, and no harmful additives. Excellence in every bite.</p>
+        </div>
+
+        <div class="rise-card bg-white rounded-2xl shadow-sm p-8 text-center border-2 border-kumkum/60">
+          <div class="icon-spin w-14 h-14 mx-auto mb-5 rounded-xl bg-gradient-to-br from-amber-400 to-yellow-500 text-white flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 21c-4-2.5-9-6.5-9-11a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 1.7-.8 3.3-2 4.7"/><path d="M14 15l3 3 5-6"/>
+            </svg>
+          </div>
+          <h3 class="font-bold text-kumkum text-lg mb-3">Customer Care</h3>
+          <p class="text-sm text-slate-500 leading-relaxed">Dedicated customer service team ready to help with orders, inquiries, and custom requests.</p>
+        </div>
+
+        <div class="rise-card bg-white rounded-2xl shadow-sm p-8 text-center">
+          <div class="icon-spin w-14 h-14 mx-auto mb-5 rounded-xl bg-gradient-to-br from-sky-400 to-blue-500 text-white flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="7" width="14" height="10" rx="1"/><path d="M15 10h4l3 3v4h-7z"/>
+              <circle cx="6" cy="19" r="1.5"/><circle cx="17.5" cy="19" r="1.5"/>
+            </svg>
+          </div>
+          <h3 class="font-bold text-kumkum text-lg mb-3">Fresh Delivery</h3>
+          <p class="text-sm text-slate-500 leading-relaxed">Products prepared fresh and delivered in secure packaging to ensure quality and taste.</p>
+        </div>
+
+        <div class="rise-card bg-white rounded-2xl shadow-sm p-8 text-center">
+          <div class="icon-spin w-14 h-14 mx-auto mb-5 rounded-xl bg-gradient-to-br from-emerald-400 to-green-500 text-white flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <path d="M12 21s-6.7-4.35-9.33-8.2C1 10.4 1.4 6.9 4.1 5.1c2.2-1.5 5-.9 6.6 1 .4.5.9 1.1 1.3 1.7.4-.6.9-1.2 1.3-1.7 1.6-1.9 4.4-2.5 6.6-1 2.7 1.8 3.1 5.3 1.43 7.7C18.7 16.65 12 21 12 21z"/>
+            </svg>
+          </div>
+          <h3 class="font-bold text-kumkum text-lg mb-3">Health Focused</h3>
+          <p class="text-sm text-slate-500 leading-relaxed">Formulated for health and wellness. Products for all ages, from babies to seniors.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="js/navbar.js"></script>
+  <script src="js/footer.js"></script>
+  <script>
+    document.getElementById("contact-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const name = document.getElementById("cf-name").value.trim();
+      const email = document.getElementById("cf-email").value.trim();
+      const phone = document.getElementById("cf-phone").value.trim();
+      const message = document.getElementById("cf-message").value.trim();
+
+      const subject = `Website Inquiry from ${name}`;
+      const body =
+        `Name: ${name}\n` +
+        `Email: ${email}\n` +
+        `Phone: ${phone || "-"}\n\n` +
+        `Message:\n${message}`;
+
+      // Brief visual confirmation before handing off to the email client
+      const label = document.getElementById("cf-submit-label");
+      const check = document.getElementById("cf-submit-check");
+      label.textContent = "Opening your email app...";
+      check.classList.add("show");
+
+      window.location.href =
+        `mailto:nicyfoods5@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+      setTimeout(() => {
+        label.textContent = "Send Message";
+        check.classList.remove("show");
+      }, 2500);
+    });
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal, .stagger, .kolam-divider');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+    revealEls.forEach(el => io.observe(el));
+  </script>
+
+</body>
+</html>

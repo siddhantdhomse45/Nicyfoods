@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Details | NicyFoods</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FBF1E2',
+                        jaggery: '#5C3A25',
+                        ink: '#3A2417',
+                        turmeric: '#E8A33D',
+                        marigold: '#F2C14E',
+                        kumkum: '#A63A2E',
+                        herbal: '#5F7A4F',
+                    },
+                    fontFamily: {
+                        display: ['"Rozha One"', 'serif'],
+                        body: ['Poppins', 'sans-serif'],
+                    },
+                },
+            },
+        };
+    </script>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --cream: #FBF1E2;
+            --jaggery: #5C3A25;
+            --ink: #3A2417;
+            --turmeric: #E8A33D;
+            --marigold: #F2C14E;
+            --kumkum: #A63A2E;
+            --herbal: #5F7A4F;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--cream);
+            color: var(--ink);
+            overflow-x: hidden;
+        }
+        h1,
+        h2,
+        h3,
+        .font-display {
+            font-family: 'Rozha One', serif;
+            letter-spacing: .01em;
+        }
+
+        /* ---------- scroll reveal ---------- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity .8s cubic-bezier(.16, .84, .44, 1), transform .8s cubic-bezier(.16, .84, .44, 1);
+        }
+        .reveal.in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .stagger.in>* {
+            animation: fadeUp .7s cubic-bezier(.16, .84, .44, 1) both;
+        }
+        .stagger.in>*:nth-child(1) {
+            animation-delay: .05s
+        }
+        .stagger.in>*:nth-child(2) {
+            animation-delay: .15s
+        }
+        .stagger.in>*:nth-child(3) {
+            animation-delay: .25s
+        }
+        .stagger.in>*:nth-child(4) {
+            animation-delay: .35s
+        }
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(22px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .card-in {
+            animation: fadeUp .6s cubic-bezier(.16, .84, .44, 1) both;
+        }
+        .detail-in {
+            animation: fadeUp .7s cubic-bezier(.16, .84, .44, 1) both;
+        }
+
+        /* ---------- kolam divider ---------- */
+        .kolam-divider path,
+        .kolam-divider circle {
+            stroke-dasharray: 340;
+            stroke-dashoffset: 340;
+            transition: stroke-dashoffset 1.6s cubic-bezier(.16, .84, .44, 1);
+        }
+        .kolam-divider.in path,
+        .kolam-divider.in circle {
+            stroke-dashoffset: 0;
+        }
+
+        /* ---------- image gallery ---------- */
+        #main-image {
+            transition: opacity .3s ease, transform .5s cubic-bezier(.16, .84, .44, 1);
+        }
+        .gallery-frame:hover #main-image {
+            transform: scale(1.04);
+        }
+        .thumb {
+            transition: border-color .3s ease, transform .3s ease;
+        }
+        .thumb.active {
+            border-color: var(--kumkum);
+        }
+        .thumb:hover {
+            transform: translateY(-2px);
+        }
+
+        /* ---------- cards ---------- */
+        .product-card {
+            transition: box-shadow .35s ease, transform .35s ease;
+        }
+        .product-card:hover {
+            box-shadow: 0 22px 40px -18px rgba(92, 58, 37, .35);
+            transform: translateY(-6px);
+        }
+        .product-card .prod-img {
+            transition: transform .5s cubic-bezier(.16, .84, .44, 1);
+        }
+        .product-card:hover .prod-img {
+            transform: scale(1.08);
+        }
+
+        .rise-card {
+            transition: transform .45s cubic-bezier(.16, .84, .44, 1), box-shadow .45s ease;
+        }
+        .rise-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 22px 40px -18px rgba(92, 58, 37, .3);
+        }
+        .icon-spin {
+            transition: transform .6s cubic-bezier(.34, 1.56, .64, 1);
+        }
+        .rise-card:hover .icon-spin {
+            transform: rotate(12deg) scale(1.08);
+        }
+
+        /* ---------- CTA buttons ---------- */
+        .cta-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -60%;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(115deg, transparent, rgba(255, 255, 255, .55), transparent);
+            transform: skewX(-20deg);
+            transition: left .8s ease;
+        }
+        .cta-btn:hover::before {
+            left: 130%;
+        }
+
+        /* ---------- checklist ---------- */
+        .check-item {
+            opacity: 0;
+            transform: translateX(-8px);
+            animation: checkIn .5s ease forwards;
+        }
+        @keyframes checkIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .check-mark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--herbal);
+            color: #fff;
+            font-size: 11px;
+            flex-shrink: 0;
+        }
+
+        /* ---------- step numbers ---------- */
+        .step-num {
+            transition: transform .4s cubic-bezier(.34, 1.56, .64, 1);
+        }
+        .rise-card:hover .step-num {
+            transform: scale(1.12) rotate(-4deg);
+        }
+
+        /* ---------- floating ladoo particles (HOME/ABOUT style) ---------- */
+        .ladoo-particle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, #F2C14E, #C8791F 70%);
+            opacity: .18;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .ladoo-particle.dim {
+            opacity: .10;
+        }
+        .ladoo-particle.glow {
+            opacity: .28;
+            box-shadow: 0 0 24px 6px rgba(242, 193, 78, .25);
+        }
+
+        .float-drift {
+            animation: driftY 7s ease-in-out infinite;
+        }
+        .float-drift-slow {
+            animation: driftY 11s ease-in-out infinite;
+        }
+        .float-y {
+            animation: floatY 5s ease-in-out infinite;
+        }
+        .float-y-slow {
+            animation: floatY 9s ease-in-out infinite;
+        }
+
+        @keyframes driftY {
+            0%,
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-18px) translateX(8px);
+            }
+        }
+        @keyframes floatY {
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-16px) rotate(6deg);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+            .reveal {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            .ladoo-particle {
+                opacity: .12 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-cream">
+
+    <div id="navbar-placeholder"></div>
+
+    <!-- ===== floating particles : top area ===== -->
+    <div class="relative">
+        <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+            <div class="ladoo-particle glow w-8 h-8 float-drift" style="top:6%; left:4%; --dur:8s; --delay:.2s;"></div>
+            <div class="ladoo-particle dim w-5 h-5 float-drift-slow" style="top:12%; left:20%; --dur:10s; --delay:1.4s;"></div>
+            <div class="ladoo-particle w-6 h-6 float-y" style="top:4%; right:8%; --dur:9s; --delay:2.1s;"></div>
+            <div class="ladoo-particle dim w-4 h-4 float-drift" style="top:18%; right:24%; --dur:7s; --delay:.6s;"></div>
+            <div class="ladoo-particle glow w-7 h-7 float-y-slow" style="top:10%; left:48%; --dur:11s; --delay:1.8s;"></div>
+        </div>
+
+        <main id="detail-root" class="relative z-10 max-w-7xl mx-auto px-6 py-12">
+            <!-- Filled in by JS -->
+        </main>
+    </div>
+
+    <!-- kolam divider -->
+    <div class="flex justify-center pb-6">
+        <svg class="kolam-divider w-40 h-10" viewBox="0 0 200 40" fill="none">
+            <path d="M2 20 Q 50 2, 100 20 T 198 20" stroke="#E8A33D" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="2" cy="20" r="3" fill="#A63A2E"/><circle cx="100" cy="20" r="3" fill="#A63A2E"/><circle cx="198" cy="20" r="3" fill="#A63A2E"/>
+        </svg>
+    </div>
+
+    <!-- Similar Products -->
+    <section class="relative max-w-7xl mx-auto px-6 pb-16 overflow-hidden">
+        <!-- floating particles -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="ladoo-particle dim w-6 h-6 float-drift-slow" style="top:8%; left:6%;"></div>
+            <div class="ladoo-particle glow w-5 h-5 float-y" style="bottom:10%; right:8%;"></div>
+            <div class="ladoo-particle w-7 h-7 float-drift" style="top:30%; right:12%;"></div>
+            <div class="ladoo-particle dim w-4 h-4 float-y-slow" style="bottom:20%; left:12%;"></div>
+        </div>
+
+        <div class="reveal text-center mb-10">
+            <span class="text-kumkum text-xs tracking-[0.3em] uppercase font-semibold">Keep Exploring</span>
+            <h2 class="font-display text-2xl sm:text-3xl text-jaggery mt-3">You Might Also Like</h2>
+        </div>
+        <div id="similar-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+    </section>
+
+    <!-- Our Quality Promise -->
+    <section class="relative py-16 overflow-hidden bg-jaggery/[0.04]">
+        <!-- floating particles -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="ladoo-particle glow w-14 h-14 float-drift-slow" style="top:6%; left:3%;"></div>
+            <div class="ladoo-particle w-9 h-9 float-y" style="top:12%; right:4%;"></div>
+            <div class="ladoo-particle dim w-8 h-8 float-drift" style="bottom:8%; left:6%;"></div>
+            <div class="ladoo-particle glow w-6 h-6 float-y-slow" style="bottom:12%; right:8%;"></div>
+            <div class="ladoo-particle w-5 h-5 float-drift-slow" style="top:35%; left:20%;"></div>
+            <div class="ladoo-particle dim w-7 h-7 float-y" style="top:40%; right:18%;"></div>
+        </div>
+
+        <div class="relative max-w-6xl mx-auto px-6">
+            <div class="reveal flex items-center justify-center gap-3 mb-10">
+                <span class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-emerald-400 text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 6L9 17l-5-5"/>
+                    </svg>
+                </span>
+                <h2 class="font-display text-2xl sm:text-3xl text-kumkum text-center">Our Quality Promise</h2>
+            </div>
+            <div class="stagger reveal grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div class="rise-card bg-white rounded-2xl p-7 text-center shadow-sm">
+                    <div class="icon-spin w-12 h-12 mx-auto mb-4 rounded-xl bg-emerald-400 text-white flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 6L9 17l-5-5"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-kumkum text-lg mb-2">100% Pure Ghee</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">Authentic clarified butter for authentic taste and superior nutrition in every product.</p>
+                </div>
+                <div class="rise-card bg-white rounded-2xl p-7 text-center shadow-sm">
+                    <div class="icon-spin w-12 h-12 mx-auto mb-4 rounded-xl bg-amber-400 text-white flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M8 3h8l1 4H7l1-4z"/><path d="M6 7h12l-1.2 12.2A2 2 0 0 1 14.8 21H9.2a2 2 0 0 1-2-1.8L6 7z"/><path d="M9 11h6"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-kumkum text-lg mb-2">Natural Jaggery</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">Unrefined jaggery providing natural sweetness with essential minerals and nutrients.</p>
+                </div>
+                <div class="rise-card bg-white rounded-2xl p-7 text-center shadow-sm border-2 border-kumkum/60">
+                    <div class="icon-spin w-12 h-12 mx-auto mb-4 rounded-xl bg-red-500 text-white flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6"/><path d="M9 9l6 6"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-kumkum text-lg mb-2">No Harmful Additives</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">Zero maida, preservatives, artificial essence, or synthetic colors whatsoever.</p>
+                </div>
+                <div class="rise-card bg-white rounded-2xl p-7 text-center shadow-sm">
+                    <div class="icon-spin w-12 h-12 mx-auto mb-4 rounded-xl bg-rose-500 text-white flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                            <path d="M12 21s-6.7-4.35-9.33-8.2C1 10.4 1.4 6.9 4.1 5.1c2.2-1.5 5-.9 6.6 1 .4.5.9 1.1 1.3 1.7.4-.6.9-1.2 1.3-1.7 1.6-1.9 4.4-2.5 6.6-1 2.7 1.8 3.1 5.3 1.43 7.7C18.7 16.65 12 21 12 21z"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-kumkum text-lg mb-2">Handmade with Love</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">Every batch prepared with care, attention, and commitment to your family's wellness.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Our Customers Love Us -->
+    <section class="relative py-16 overflow-hidden">
+        <!-- floating particles -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="ladoo-particle glow w-8 h-8 float-drift" style="top:6%; right:4%;"></div>
+            <div class="ladoo-particle dim w-5 h-5 float-y-slow" style="top:14%; left:6%;"></div>
+            <div class="ladoo-particle w-6 h-6 float-drift-slow" style="bottom:8%; right:10%;"></div>
+            <div class="ladoo-particle dim w-4 h-4 float-y" style="bottom:12%; left:8%;"></div>
+            <div class="ladoo-particle glow w-7 h-7 float-drift" style="top:35%; left:16%;"></div>
+            <div class="ladoo-particle w-5 h-5 float-y-slow" style="top:40%; right:18%;"></div>
+        </div>
+
+        <div class="relative max-w-6xl mx-auto px-6">
+            <div class="reveal flex items-center justify-center gap-3 mb-10">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-turmeric" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                    <path d="M12 2.5l2.9 6.05 6.6.87-4.85 4.6 1.24 6.53L12 17.9l-5.89 2.65L7.35 14 2.5 9.42l6.6-.87L12 2.5z"/>
+                </svg>
+                <h2 class="font-display text-2xl sm:text-3xl text-jaggery text-center">Why Our Customers Love Us</h2>
+            </div>
+
+            <div class="stagger reveal grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <div class="rise-card bg-white rounded-2xl border border-slate-100 shadow-sm p-8 text-center">
+                    <div class="icon-spin w-14 h-14 mx-auto mb-5 rounded-xl bg-gradient-to-br from-amber-300 to-yellow-500 text-white flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                            <path d="M12 2.5l2.9 6.05 6.6.87-4.85 4.6 1.24 6.53L12 17.9l-5.89 2.65L7.35 14 2.5 9.42l6.6-.87L12 2.5z"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-kumkum text-lg mb-3">Premium Quality</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">"The taste and quality are exceptional. We can taste the pure ghee and natural ingredients. Recommend to everyone!" - Satisfied Customer</p>
+                </div>
+
+                <div class="rise-card bg-white rounded-2xl border border-slate-100 shadow-sm p-8 text-center">
+                    <div class="icon-spin w-14 h-14 mx-auto mb-5 rounded-xl bg-gradient-to-br from-rose-400 to-red-500 text-white flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                            <path d="M12 21s-6.7-4.35-9.33-8.2C1 10.4 1.4 6.9 4.1 5.1c2.2-1.5 5-.9 6.6 1 .4.5.9 1.1 1.3 1.7.4-.6.9-1.2 1.3-1.7 1.6-1.9 4.4-2.5 6.6-1 2.7 1.8 3.1 5.3 1.43 7.7C18.7 16.65 12 21 12 21z"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-kumkum text-lg mb-3">Family Friendly</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">"From my 1-year-old to grandparents, everyone loves these ladoos. Safe, healthy, and delicious!" - Happy Parent</p>
+                </div>
+
+                <div class="rise-card bg-white rounded-2xl border border-slate-100 shadow-sm p-8 text-center">
+                    <div class="icon-spin w-14 h-14 mx-auto mb-5 rounded-xl bg-gradient-to-br from-lime-300 to-green-500 text-white flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M11 20A7 7 0 0 1 4 13c0-5 4-8 11-9 1 6-1 12-4 16z"/><path d="M4 13c4 0 8 2 10 6"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-kumkum text-lg mb-3">Health Conscious</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">"Finally, a brand I can trust. No preservatives, no artificial colors - just pure, authentic handmade goodness." - Health Enthusiast</p>
+                </div>
+
+                <div class="rise-card bg-white rounded-2xl border border-slate-100 shadow-sm p-8 text-center">
+                    <div class="icon-spin w-14 h-14 mx-auto mb-5 rounded-xl bg-gradient-to-br from-amber-300 to-orange-500 text-white flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                            <path d="M2 21h3V10H2v11zm19-10.5c0-.83-.67-1.5-1.5-1.5H14l1-4.5c.1-.45 0-.92-.3-1.28-.28-.35-.7-.72-1.2-.72-.35 0-.68.14-.92.4L7.5 9.5V21h11c.66 0 1.24-.4 1.48-1.02l2.29-5.5c.15-.36.23-.75.23-1.15v-2.33z"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-kumkum text-lg mb-3">Great Service</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">"Quick response to inquiries, fresh delivery, and reasonable pricing. NicyFoods is our go-to brand now!" - Regular Customer</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Order -->
+    <section class="relative py-16 bg-jaggery/[0.04] overflow-hidden">
+        <!-- floating particles -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="ladoo-particle glow w-10 h-10 float-drift-slow" style="top:6%; left:4%;"></div>
+            <div class="ladoo-particle dim w-6 h-6 float-y" style="top:12%; right:6%;"></div>
+            <div class="ladoo-particle w-8 h-8 float-drift" style="bottom:8%; left:8%;"></div>
+            <div class="ladoo-particle glow w-5 h-5 float-y-slow" style="bottom:12%; right:10%;"></div>
+            <div class="ladoo-particle dim w-7 h-7 float-drift-slow" style="top:30%; left:18%;"></div>
+            <div class="ladoo-particle w-6 h-6 float-y" style="top:35%; right:18%;"></div>
+        </div>
+
+        <div class="relative max-w-6xl mx-auto px-6 text-center">
+            <div class="reveal mb-3">
+                <h2 class="flex items-center justify-center gap-3 font-display text-2xl sm:text-3xl text-jaggery">
+                    <span class="inline-block w-2.5 h-6 bg-turmeric rounded-sm"></span>
+                    How to Order
+                </h2>
+            </div>
+            <p class="reveal text-slate-500 mb-12">Ordering from NicyFoods is simple and convenient. Follow these easy steps:</p>
+
+            <div class="stagger reveal grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="rise-card bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
+                    <div class="step-num w-12 h-12 mx-auto mb-5 rounded-xl bg-gradient-to-br from-sky-400 to-blue-500 text-white flex items-center justify-center font-bold text-lg">1</div>
+                    <h3 class="font-bold text-kumkum mb-2">Select Product</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">Click "Order Now" on the product you want or navigate to our products page.</p>
+                </div>
+                <div class="rise-card bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
+                    <div class="step-num w-12 h-12 mx-auto mb-5 rounded-xl bg-gradient-to-br from-sky-400 to-blue-500 text-white flex items-center justify-center font-bold text-lg">2</div>
+                    <h3 class="font-bold text-kumkum mb-2">Send Email/Call</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">Send us an email with your requirements or call us at +91 8263001410 for order details.</p>
+                </div>
+                <div class="rise-card bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
+                    <div class="step-num w-12 h-12 mx-auto mb-5 rounded-xl bg-gradient-to-br from-sky-400 to-blue-500 text-white flex items-center justify-center font-bold text-lg">3</div>
+                    <h3 class="font-bold text-kumkum mb-2">Confirm Details</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">We'll confirm your order quantity, delivery address, and provide pricing information.</p>
+                </div>
+                <div class="rise-card bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
+                    <div class="step-num w-12 h-12 mx-auto mb-5 rounded-xl bg-gradient-to-br from-sky-400 to-blue-500 text-white flex items-center justify-center font-bold text-lg">4</div>
+                    <h3 class="font-bold text-kumkum mb-2">Fresh Delivery</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">We prepare your fresh order and deliver it securely to your doorstep.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="js/navbar.js">
+    </script>
+    <script src="js/footer.js">
+    </script>
+    <script src="js/products-data.js">
+    </script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get("id");
+        const product = PRODUCTS.find(p => p.id === id) || PRODUCTS[0];
+
+        function renderDetail(p) {
+            const root = document.getElementById("detail-root");
+
+            const weightCards = p.weights.map(w => `
+            <div class="bg-white rounded-xl border border-orange-100 py-5 text-center">
+              <div class="text-slate-500 text-sm mb-1">${w.label}</div>
+              <div class="text-kumkum font-extrabold text-xl">${w.price !== null ? "₹" + w.price : "-"}</div>
+            </div>
+          `).join("");
+
+            const featureItems = p.features.map((f, i) => `
+            <li class="check-item flex items-start gap-2 text-slate-600 mb-3" style="animation-delay:${i * 0.08}s">
+              <span class="check-mark mt-0.5">✓</span> ${f}
+            </li>
+          `).join("");
+
+            const ingredientItems = p.ingredients.map((i2, i) => `
+            <li class="check-item flex items-start gap-2 text-slate-600 mb-3" style="animation-delay:${i * 0.08}s">
+              <span class="check-mark mt-0.5">✓</span> ${i2}
+            </li>
+          `).join("");
+
+            const benefitItems = p.benefits.map((b, i) => `
+            <li class="check-item flex items-start gap-2 text-slate-600 mb-3" style="animation-delay:${i * 0.08}s">
+              <span class="check-mark mt-0.5">✓</span> ${b}
+            </li>
+          `).join("");
+
+            root.innerHTML = `
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+
+              <!-- Left: Image Gallery -->
+              <div class="detail-in">
+                <div class="gallery-frame bg-white rounded-2xl overflow-hidden h-[420px] flex items-center justify-center shadow-sm">
+                  <img id="main-image" src="${p.img}" alt="${p.name}" class="w-full h-full object-contain"
+                       onerror="this.onerror=null;this.src='';this.alt='';this.parentElement.innerHTML='<span class=\\'text-slate-400\\'>${p.name}</span>'" />
+                </div>
+                <div class="flex gap-3 mt-4">
+                  <button class="thumb active w-20 h-20 rounded-lg border-2 overflow-hidden bg-white">
+                    <img src="${p.img}" class="w-full h-full object-cover" onerror="this.style.display='none'" />
+                  </button>
+                </div>
+              </div>
+
+              <!-- Right: Info -->
+              <div class="detail-in" style="animation-delay:.12s">
+                <span class="inline-block mb-4 text-xs font-bold tracking-wide text-kumkum bg-orange-50 px-4 py-1.5 rounded-full">
+                  ${CATEGORY_LABEL[p.cat]}
+                </span>
+                <h1 class="font-display text-3xl sm:text-4xl text-jaggery mb-4">${p.name}</h1>
+                <p class="text-slate-500 leading-relaxed mb-6">${p.desc}</p>
+                <div class="text-3xl font-extrabold text-kumkum mb-8">₹${p.price}</div>
+
+                <div class="bg-orange-50 rounded-2xl p-6">
+                  <h3 class="flex items-center gap-2 font-bold text-kumkum text-lg mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                      <path d="M16 7V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v2"/>
+                      <circle cx="16" cy="13" r="1.5"/>
+                    </svg>
+                    Pricing &amp; Delivery
+                  </h3>
+                  <div class="grid grid-cols-3 gap-3">
+                    ${weightCards}
+                  </div>
+                  <p class="flex items-start gap-2 text-xs text-slate-500 mt-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 flex-shrink-0 mt-0.5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M9 18h6"/><path d="M10 22h4"/>
+                      <path d="M12 2a7 7 0 0 0-4 12.7c.6.4 1 1.2 1 2.05V17h6v-2.25c0-.85.4-1.65 1-2.05A7 7 0 0 0 12 2z"/>
+                    </svg>
+                    Delivery charges are added based on weight. Contact us for complete pricing details.
+                  </p>
+                </div>
+
+                <div class="mt-6 flex flex-col sm:flex-row gap-4">
+                  <a href="mailto:orders@nicyfoods.com?subject=Order%20Enquiry%20-%20${encodeURIComponent(p.name)}&body=Hi%20NicyFoods%2C%0A%0AI%20would%20like%20to%20order%3A%20${encodeURIComponent(p.name)}%0AQuantity%3A%20%0ADelivery%20Address%3A%20"
+                     class="cta-btn flex-1 inline-flex items-center justify-center gap-2 text-center bg-gradient-to-r from-turmeric to-kumkum hover:opacity-95 text-white font-semibold py-3.5 rounded-xl transition-all hover:-translate-y-0.5 shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M22 6l-10 7L2 6"/><path d="M2 6h20v12H2z"/>
+                    </svg>
+                    Order Now via Email
+                  </a>
+                  <a href="tel:+918263001410"
+                     class="flex-1 inline-flex items-center justify-center gap-2 text-center border-2 border-kumkum text-kumkum font-semibold py-3.5 rounded-xl transition-all hover:bg-orange-50 hover:-translate-y-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                    Call: +91 8263001410
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Key Features / Ingredients / Health Benefits -->
+            <div class="detail-in grid grid-cols-1 md:grid-cols-3 gap-10 border-t border-slate-200 pt-12" style="animation-delay:.22s">
+              <div>
+                <h3 class="flex items-center gap-2 font-bold text-kumkum text-lg mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-turmeric" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                    <path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6L12 2z"/>
+                    <path d="M19 14l.8 2.4L22 17l-2.2.6L19 20l-.8-2.4L16 17l2.2-.6L19 14z" opacity="0.6"/>
+                  </svg>
+                  Key Features
+                </h3>
+                <ul>${featureItems}</ul>
+              </div>
+              <div>
+                <h3 class="flex items-center gap-2 font-bold text-kumkum text-lg mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-herbal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 20A7 7 0 0 1 4 13c0-5 4-8 11-9 1 6-1 12-4 16z"/><path d="M4 13c4 0 8 2 10 6"/>
+                  </svg>
+                  Ingredients
+                </h3>
+                <ul>${ingredientItems}</ul>
+              </div>
+              <div>
+                <h3 class="flex items-center gap-2 font-bold text-kumkum text-lg mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-herbal" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                    <path d="M12 21s-6.7-4.35-9.33-8.2C1 10.4 1.4 6.9 4.1 5.1c2.2-1.5 5-.9 6.6 1 .4.5.9 1.1 1.3 1.7.4-.6.9-1.2 1.3-1.7 1.6-1.9 4.4-2.5 6.6-1 2.7 1.8 3.1 5.3 1.43 7.7C18.7 16.65 12 21 12 21z"/>
+                  </svg>
+                  Health Benefits
+                </h3>
+                <ul>${benefitItems}</ul>
+              </div>
+            </div>
+          `;
+        }
+
+        renderDetail(product);
+        renderSimilar(product);
+        document.title = product.name + " | NicyFoods";
+
+        function renderSimilar(current) {
+            const grid = document.getElementById("similar-grid");
+            let similar = PRODUCTS.filter(p => p.cat === current.cat && p.id !== current.id);
+
+            if (similar.length < 4) {
+                const extras = PRODUCTS.filter(p => p.id !== current.id && !similar.includes(p));
+                similar = similar.concat(extras).slice(0, 4);
+            } else {
+                similar = similar.slice(0, 4);
+            }
+
+            grid.innerHTML = "";
+            similar.forEach((p, i) => {
+                const weightsLine = p.weights
+                    .map(w => `${w.label.replace(" ", "")}₹${w.price ?? "-"}`)
+                    .join(" | ");
+
+                const card = document.createElement("a");
+                card.href = `product-detail.html?id=${p.id}`;
+                card.className = "product-card card-in block bg-white rounded-2xl shadow-md overflow-hidden flex flex-col";
+                card.style.animationDelay = `${i * 0.08}s`;
+                card.innerHTML = `
+                <div class="h-44 bg-gradient-to-br from-orange-100 to-amber-50 overflow-hidden">
+                  <img src="${p.img}" alt="${p.name}" class="prod-img w-full h-full object-cover" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'), {className:'w-full h-full flex items-center justify-center text-slate-400 text-sm', innerText:'${p.name}'}));" />
+                </div>
+                <div class="p-5 flex flex-col flex-1">
+                  <span class="self-start mb-2 text-[11px] font-bold tracking-wide text-kumkum bg-orange-50 px-3 py-1 rounded-full">${CATEGORY_LABEL[p.cat]}</span>
+                  <h3 class="font-display text-lg text-jaggery mb-1">${p.name}</h3>
+                  <p class="text-sm text-slate-500 flex-1 mb-3 leading-snug">${p.desc}</p>
+                  <div class="text-2xl font-extrabold text-kumkum mb-2">₹${p.price}</div>
+                  <p class="text-xs text-slate-500 mb-4"><span class="font-semibold text-jaggery">Courier Charges:</span> ${weightsLine}</p>
+                  <span class="cta-btn mt-auto w-full text-center bg-gradient-to-r from-turmeric to-kumkum hover:opacity-95 text-white font-semibold py-2.5 rounded-lg transition-opacity">View Details</span>
+                </div>
+              `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Scroll reveal for static sections
+        const revealEls = document.querySelectorAll('.reveal, .stagger, .kolam-divider');
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in');
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+        revealEls.forEach(el => io.observe(el));
+    </script>
+
+</body>
+</html>
