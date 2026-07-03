@@ -1,20 +1,20 @@
 // navbar.js - shared navbar component, loaded on every page
 
 function loadNavbar() {
-  const currentPage = window.location.pathname.split("/").pop() || "home.html";
+  const currentPage = window.location.pathname.split("/").pop() || "index.html";
 
   const navHTML = `
     <div id="site-navbar" class="fixed top-0 left-0 w-full z-50">
       <nav id="nav-bar-inner" class="bg-jaggery flex items-center justify-between px-6 md:px-10 py-4 transition-shadow duration-300" style="font-family:'Poppins', sans-serif;">
         <div class="flex items-center gap-3">
-          <a href="home.html" class="flex items-center gap-3 group">
+          <a href="index.html" class="flex items-center gap-3 group">
             <img src="https://nicyfoods.com/images/logo.png" alt="NicyFoods Logo" class="w-11 h-11 rounded-md object-cover ring-2 ring-marigold/30 transition-transform duration-300 group-hover:scale-105">
             <span class="text-cream text-2xl" style="font-family:'Rozha One', serif;">NicyFoods</span>
           </a>
         </div>
 
         <ul class="hidden md:flex items-center gap-10 text-cream font-semibold text-base">
-          <li><a href="home.html" data-page="home.html" class="nav-link relative pb-1 hover:text-marigold transition-colors">Home</a></li>
+          <li><a href="index.html" data-page="index.html" class="nav-link relative pb-1 hover:text-marigold transition-colors">Home</a></li>
           <li><a href="about.html" data-page="about.html" class="nav-link relative pb-1 hover:text-marigold transition-colors">About</a></li>
           <li><a href="products.html" data-page="products.html" class="nav-link relative pb-1 hover:text-marigold transition-colors">Products</a></li>
           <li><a href="contact.html" data-page="contact.html" class="nav-link relative pb-1 hover:text-marigold transition-colors">Contact</a></li>
@@ -31,7 +31,7 @@ function loadNavbar() {
       </nav>
 
       <ul id="mobile-menu" class="mobile-menu-collapsed md:hidden bg-jaggery text-cream font-semibold text-lg flex flex-col gap-1 px-6 overflow-hidden" style="font-family:'Poppins', sans-serif;">
-        <li><a href="home.html" data-page="home.html" class="nav-link-mobile block py-3 border-b border-cream/10 hover:text-marigold hover:pl-2 transition-all">Home</a></li>
+        <li><a href="index.html" data-page="index.html" class="nav-link-mobile block py-3 border-b border-cream/10 hover:text-marigold hover:pl-2 transition-all">Home</a></li>
         <li><a href="about.html" data-page="about.html" class="nav-link-mobile block py-3 border-b border-cream/10 hover:text-marigold hover:pl-2 transition-all">About</a></li>
         <li><a href="products.html" data-page="products.html" class="nav-link-mobile block py-3 border-b border-cream/10 hover:text-marigold hover:pl-2 transition-all">Products</a></li>
         <li><a href="contact.html" data-page="contact.html" class="nav-link-mobile block py-3 hover:text-marigold hover:pl-2 transition-all">Contact</a></li>
